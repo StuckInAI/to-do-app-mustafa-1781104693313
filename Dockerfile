@@ -3,9 +3,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
 COPY . .
-ENV CROSS_COMPILE_TARGET=wasm32
-RUN NODE_OPTIONS="--max-old-space-size=4096" npx vite build --mode production || \
-    (echo 'Retrying build...' && NODE_OPTIONS="--max-old-space-size=4096" npx vite build --mode production)
+RUN NODE_OPTIONS="--max-old-space-size=4096" npx vite build --mode production 2>&1 || \
+    (echo 'Retrying build...' && NODE_OPTIONS="--max-old-space-size=4096" npx vite build --mode production 2>&1)
 RUN test -d dist || (echo 'Build failed' && exit 1)
 
 FROM nginx:alpine
