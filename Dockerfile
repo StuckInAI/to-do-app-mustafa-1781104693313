@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --legacy-peer-deps
 COPY . .
-RUN NODE_OPTIONS="--max-old-space-size=4096" npx vite build 2>&1 || (echo 'Build failed' && exit 1)
+RUN NODE_OPTIONS="--max-old-space-size=4096" npx vite build --emptyOutDir 2>&1 || (echo 'Build failed' && exit 1)
 
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
